@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="css/card.css" />
 </head>
 <body>
-  
+  <!--test-->
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
         <div class="container px-5">
             <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
@@ -45,7 +45,7 @@
     <header class="bg-light py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-dark">
-                <h1 class="display-4 fw-bold">Join 🎉🎈</h1>
+                <h1 class="display-4 fw-bold">Join 🎉🎈</h1> 
             </div>
         </div>
     </header>
