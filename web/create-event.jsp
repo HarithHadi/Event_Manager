@@ -24,6 +24,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="registerClub.jsp">Register Club</a></li>
           <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
           <li class="nav-item"><a class="nav-link" href="approval.jsp">Approve Events</a></li>
           <li class="nav-item"><a class="nav-link text-danger" href="login.jsp">Logout</a></li>
