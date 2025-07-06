@@ -1,4 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%
+    if (session.getAttribute("currentStudent") == null) {
+        response.sendRedirect("loginn.jsp?haataklogin=true");
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +27,6 @@
     <link rel="stylesheet" href="css/card.css" />
 </head>
 <body>
-  <!--test-->
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
         <div class="container px-5">
             <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
