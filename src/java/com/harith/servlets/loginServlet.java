@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import com.harith.model.Student;
 
 public class loginServlet extends HttpServlet {
 
@@ -25,10 +26,34 @@ public class loginServlet extends HttpServlet {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                HttpSession session = request.getSession();
                 int userId = rs.getInt("user_id");
+                HttpSession session = request.getSession();
                 session.setAttribute("userID", userId);
                 session.setAttribute("role", rs.getString("role"));
+
+                
+                String studentQuery = "SELECT * FROM STUDENTS WHERE USER_ID=?";
+                PreparedStatement studentStmt = conn.prepareStatement(studentQuery);
+                studentStmt.setInt(1, userId);
+                ResultSet studentrs = studentStmt.executeQuery();
+                
+                if(studentrs.next()){
+                    Student student = new Student();
+                    student.setStudentID(studentrs.getInt("STUDENT_ID"));
+                    student.setUserID(userId);
+                    student.setClubID(studentrs.getInt("CLUB_ID"));
+                    student.setStudentName(studentrs.getString("STUDENT_NAME"));
+                    student.setStudentCourse(studentrs.getString("STUDENT_COURSE"));
+                    student.setStudentPart(studentrs.getInt("STUDENT_PART"));
+                    student.setStudentGroup(studentrs.getString("STUDENT_GROUP"));
+                    student.setStudentPhone(studentrs.getInt("STUDENT_PHONE"));
+                    
+                    session.setAttribute("currentStudent", student);
+                }
+                studentrs.close();
+                studentStmt.close();
+                
+
 
                 // check if user is an organizer
                 String orgQuery = "SELECT O.ORGANIZER_ID FROM ORGANIZERS O "
@@ -47,9 +72,10 @@ public class loginServlet extends HttpServlet {
                 orgRs.close();
                 orgStmt.close();
 
+
                 response.sendRedirect("index.jsp");
             } else {
-                response.sendRedirect("loginn.jsp?takjadi=true");
+                response.sendRedirect("loginn.jsp?error=invalid");
             }
 
             rs.close();
@@ -62,3 +88,4 @@ public class loginServlet extends HttpServlet {
         }
     }
 }
+    

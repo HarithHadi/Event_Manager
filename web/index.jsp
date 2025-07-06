@@ -1,4 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%
+    if (session.getAttribute("currentStudent") == null) {
+        response.sendRedirect("loginn.jsp?haataklogin=true");
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
