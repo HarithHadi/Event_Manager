@@ -29,9 +29,11 @@ public class RegisterServlet extends HttpServlet {
         String course = request.getParameter("course");
         String group = request.getParameter("group");
         int part = Integer.parseInt(request.getParameter("part"));
+        String club = request.getParameter("club");
         String phone = request.getParameter("phone");
         String password = request.getParameter("password");
         String cpassword = request.getParameter("cpassword");
+        int clubId = 0;
         
         
         if(!password.equals(cpassword)){
@@ -39,6 +41,15 @@ public class RegisterServlet extends HttpServlet {
         }else{
             try{
                 Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Event_Manager", "app", "app");
+                String clubsearch = "SELECT * FROM CLUBS WHERE CLUB_NAME=?";
+                PreparedStatement stmtclub = conn.prepareStatement(clubsearch);
+                stmtclub.setString(1, club);
+                ResultSet rsclub = stmtclub.executeQuery();
+                if(rsclub.next()){
+                    clubId = rsclub.getInt("CLUB_ID");
+                }else{
+                    System.out.println("Club not found");
+                }
                 String dupe = "SELECT * FROM USERS WHERE password =? AND email=?";
                 PreparedStatement stmtdupe = conn.prepareStatement(dupe);
                 stmtdupe.setString(1, password);
@@ -49,7 +60,7 @@ public class RegisterServlet extends HttpServlet {
                     response.sendRedirect("register.jsp?dupe=true");
                 }else{
                     String insertUser = "INSERT INTO USERS (email, password, role) VALUES(?,?,'student')";
-                    String insertStudent = "INSERT INTO STUDENTS (user_id, student_name, student_course, student_part, student_group, student_phone) VALUES (?, ?, ?, ?, ?, ?)";
+                    String insertStudent = "INSERT INTO STUDENTS (user_id, student_name, student_course, student_part, student_group, student_phone, club) VALUES (?, ?, ?, ?, ?, ?, ?)";
                     
                     PreparedStatement stmtUser = conn.prepareStatement(insertUser, Statement.RETURN_GENERATED_KEYS);
                     stmtUser.setString(1, email);
@@ -70,6 +81,7 @@ public class RegisterServlet extends HttpServlet {
                         stmtStudent.setInt(4, part);
                         stmtStudent.setString(5, group);
                         stmtStudent.setString(6, phone);
+                        stmtStudent.setInt(7, clubId);
                         stmtStudent.executeUpdate();
                         stmtStudent.close();
                     }
