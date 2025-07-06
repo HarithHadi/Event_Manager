@@ -79,6 +79,17 @@
                       <option value="Finance">Finance</option>
                     </select>
                 </div>
+                  <div class="mb-3">
+                    <label for="club" class="form-label">Select Club</label>
+                    <select class="form-select" id="club" name="club">
+                      <option value="" selected disabled>Select a club</option>
+                      <option value="Multimedia club">Multimedia Club</option>
+                      <option value="Photography Club">Photography Club</option>
+                      <option value="Debate & Public Speaking Club">Debate & Public Speaking Club</option>
+                      <option value="Entrepreneurship Club">Entrepreneurship Club</option>
+                    </select>
+                  </div>
+
                 <div class="mb-3">
                   <label for="group" class="form-label">Group</label>
                   <input type="text" class="form-control" id="email" name="group" placeholder="Enter your group">
