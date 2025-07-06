@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="css/card.css" />
 </head>
 <body>
+  <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
         <div class="container px-5">
             <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
@@ -37,10 +38,18 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="registerClub.jsp">Register Club</a></li>
-                    <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
-                    <li class="nav-item"><a class="nav-link" href="approval.jsp">Approve Events</a></li>
-                    <li class="nav-item"><a class="nav-link text-danger" href="loginn.jsp">Logout</a></li>
+
+                    <%
+                        Boolean isOrganizer = (Boolean) session.getAttribute("isOrganizer");
+                        if (isOrganizer != null && isOrganizer) {
+                    %>
+                        <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
+                    <%
+                        }
+                    %>
+
+                    <li class="nav-item"><a class="nav-link" href="profile.jsp">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="logout.jsp">Logout</a></li>
                 </ul>
             </div>
         </div>

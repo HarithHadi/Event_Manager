@@ -8,7 +8,7 @@ import com.harith.model.Student;
 
 public class loginServlet extends HttpServlet {
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         String email = request.getParameter("email");
@@ -16,6 +16,8 @@ public class loginServlet extends HttpServlet {
 
         try {
             Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Event_Manager", "app", "app");
+
+            // validate user
             String query = "SELECT * FROM USERS WHERE email=? AND password=?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, email);
@@ -26,8 +28,9 @@ public class loginServlet extends HttpServlet {
             if (rs.next()) {
                 int userId = rs.getInt("user_id");
                 HttpSession session = request.getSession();
-                session.setAttribute("userID", rs.getInt("user_id")); // Use actual column name
+                session.setAttribute("userID", userId);
                 session.setAttribute("role", rs.getString("role"));
+
                 
                 String studentQuery = "SELECT * FROM STUDENTS WHERE USER_ID=?";
                 PreparedStatement studentStmt = conn.prepareStatement(studentQuery);
@@ -50,6 +53,26 @@ public class loginServlet extends HttpServlet {
                 studentrs.close();
                 studentStmt.close();
                 
+
+
+                // check if user is an organizer
+                String orgQuery = "SELECT O.ORGANIZER_ID FROM ORGANIZERS O "
+                                + "JOIN STUDENTS S ON O.STUDENT_ID = S.STUDENT_ID "
+                                + "WHERE S.USER_ID = ?";
+                PreparedStatement orgStmt = conn.prepareStatement(orgQuery);
+                orgStmt.setInt(1, userId);
+                ResultSet orgRs = orgStmt.executeQuery();
+
+                if (orgRs.next()) {
+                    session.setAttribute("isOrganizer", true);
+                } else {
+                    session.setAttribute("isOrganizer", false);
+                }
+
+                orgRs.close();
+                orgStmt.close();
+
+
                 response.sendRedirect("index.jsp");
             } else {
                 response.sendRedirect("loginn.jsp?error=invalid");

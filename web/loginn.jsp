@@ -39,7 +39,7 @@
           <div class="card shadow-sm">
             <div class="card-body">
               <h2 class="card-title text-center mb-4">Login</h2>
-              <%
+                <%
                     String error = request.getParameter("error");
                     if ("invalid".equals(error)) {
                 %>
