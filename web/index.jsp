@@ -44,7 +44,7 @@
                     %>
 
                     <li class="nav-item"><a class="nav-link" href="profile.jsp">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link text-danger" href="logout.jsp">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="login.jsp">Logout</a></li>
                 </ul>
             </div>
         </div>
