@@ -39,6 +39,17 @@
           <div class="card shadow-sm">
             <div class="card-body">
               <h2 class="card-title text-center mb-4">Login</h2>
+              <%
+                    String error = request.getParameter("error");
+                    if ("invalid".equals(error)) {
+                %>
+                    <div class="alert alert-danger text-center" role="alert">
+                        Invalid email or password. Please try again.
+                    </div>
+                <%
+                    }
+                %>
+
 
               <!-- update login servlet disini -->
               <form action="loginServlet" method="post">
@@ -57,10 +68,10 @@
 
               <hr>
               <p class="text-center small text-muted">This is a mockup. Click a role to simulate login flow:</p>
-              <div class="d-flex justify-content-center gap-2">
+<!--              <div class="d-flex justify-content-center gap-2">
                 <a href="index.jsp" class="btn btn-outline-primary btn-sm">Login as Student</a>
                 <a href="approval.jsp" class="btn btn-outline-warning btn-sm">Login as Staff</a>
-              </div>
+              </div>-->
               <div class="d-flex justify-content-center gap-2">
                 <a href="register.jsp" class="btn btn-outline-primary btn-sm">Register</a>
               </div>
