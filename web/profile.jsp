@@ -1,7 +1,8 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+  <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.harith.model.Student" %>
 <%@ page import="com.harith.model.Event" %>
 <%@ page import="com.harith.dao.EventAttendanceDAO" %>
+<%@ page import="com.harith.dao.EventDAO" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.*" %>
 
@@ -14,11 +15,13 @@ if (student == null) {
 
 String clubName = "N/A";
 List<Event> rsvpEvents = new ArrayList<Event>();
+List<Event> organiserEvents = new ArrayList<Event>();
+Map<Integer, List<String>> attendeesMap = new HashMap<Integer, List<String>>();
+
 
 try {
     Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Event_Manager", "app", "app");
 
-    // Fetch club name using club ID
     if (student.getClubID() > 0) {
         PreparedStatement clubStmt = conn.prepareStatement("SELECT CLUB_NAME FROM CLUBS WHERE CLUB_ID = ?");
         clubStmt.setInt(1, student.getClubID());
@@ -30,23 +33,29 @@ try {
         clubStmt.close();
     }
 
-    // If clubID is 0 but user is organizer, try find their club
     if ("N/A".equals(clubName) && Boolean.TRUE.equals(session.getAttribute("isOrganizer"))) {
-        PreparedStatement orgStmt = conn.prepareStatement(
-            "SELECT CLUB_NAME FROM CLUBS WHERE ORGANIZER_ID = ?"
-        );
+        PreparedStatement orgStmt = conn.prepareStatement("SELECT CLUB_NAME, CLUB_ID FROM CLUBS WHERE ORGANIZER_ID = ?");
         orgStmt.setInt(1, student.getStudentID());
         ResultSet orgRs = orgStmt.executeQuery();
         if (orgRs.next()) {
             clubName = orgRs.getString("CLUB_NAME");
+            student.setClubID(orgRs.getInt("CLUB_ID"));
         }
         orgRs.close();
         orgStmt.close();
     }
 
-    // Get RSVP'd events
     EventAttendanceDAO attendanceDAO = new EventAttendanceDAO(conn);
+    EventDAO eventDAO = new EventDAO(conn);
+
     rsvpEvents = attendanceDAO.getRsvpEventsByStudentId(student.getStudentID());
+
+    if (Boolean.TRUE.equals(session.getAttribute("isOrganizer")) && student.getClubID() > 0) {
+        organiserEvents = eventDAO.getEventsByClubId(student.getClubID());
+        for (Event evt : organiserEvents) {
+            attendeesMap.put(evt.getEventID(), attendanceDAO.getAttendeesForEvent(evt.getEventID()));
+        }
+    }
 
     conn.close();
 } catch (Exception e) {
@@ -65,25 +74,28 @@ try {
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/card.css" />
   <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
     .profile-details {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 30px;
       text-align: center;
-      padding: 60px 10px 40px 10px;
     }
     .profile-details h1 {
       font-weight: 700;
-      font-size: 2.8rem;
+      font-size: 2.2rem;
       color: #333;
       margin-bottom: 10px;
     }
     .profile-details h2 {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 500;
-      margin-bottom: 10px;
-    }
-    .profile-details p {
-      margin: 3px 0;
-      font-size: 1rem;
-      color: #555;
+      margin-bottom: 15px;
     }
     .badge-organizer {
       background: #ffc107;
@@ -92,6 +104,24 @@ try {
       border-radius: 4px;
       font-size: 12px;
       margin-left: 5px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+      margin-top: 15px;
+      text-align: left;
+    }
+    .profile-grid p {
+      margin: 0;
+      font-size: 1rem;
+      color: #555;
+    }
+    hr {
+      margin: 40px auto;
+      width: 80%;
+      border: 0;
+      border-top: 1px solid #ddd;
     }
     .cards.profile-cards {
       display: flex;
@@ -111,6 +141,43 @@ try {
     .cards.profile-cards .card__info {
       padding: 10px 15px;
     }
+    .rsvp-title {
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.8rem;
+      padding-top: 30px;
+      margin-bottom: 10px;
+    }
+    .rsvp-empty {
+      text-align: center;
+      color: #888;
+      font-style: italic;
+    }
+    .org-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .org-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .org-date {
+      font-size: 0.9rem;
+      color: #888;
+      margin-bottom: 10px;
+    }
+    .org-attendees ul {
+      padding-left: 1.2em;
+      margin: 0;
+    }
+    .org-attendees li {
+      padding: 2px 0;
+    }
   </style>
 </head>
 <body>
@@ -118,20 +185,12 @@ try {
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
   <div class="container px-5">
     <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <div class="collapse navbar-collapse justify-content-end">
       <ul class="navbar-nav">
         <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
-        <%
-          Boolean isOrganizer = (Boolean) session.getAttribute("isOrganizer");
-          if (isOrganizer != null && isOrganizer) {
-        %>
+        <% if (Boolean.TRUE.equals(session.getAttribute("isOrganizer"))) { %>
         <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
-        <%
-          }
-        %>
+        <% } %>
         <li class="nav-item"><a class="nav-link" href="profile.jsp">Profile</a></li>
         <li class="nav-item"><a class="nav-link text-danger" href="LogoutServlet">Logout</a></li>
       </ul>
@@ -141,44 +200,75 @@ try {
 
 <div class="profile-details">
   <h1><%= student.getStudentName() %></h1>
-  <h2>
-    <%= clubName %>
+  <h2><%= clubName %>
     <% if (Boolean.TRUE.equals(session.getAttribute("isOrganizer"))) { %>
       <span class="badge-organizer">Organizer</span>
     <% } %>
   </h2>
-  <p>Course: <%= student.getStudentCourse() %></p>
-  <p>Part: <%= student.getStudentPart() %> | Group: <%= student.getStudentGroup() %></p>
-  <p>Phone: <%= student.getStudentPhone() %></p>
+  <div class="profile-grid">
+    <p>Course: <%= student.getStudentCourse() %></p>
+    <p>Part: <%= student.getStudentPart() %></p>
+    <p>Group: <%= student.getStudentGroup() %></p>
+    <p>Phone: <%= student.getStudentPhone() %></p>
+  </div>
 </div>
 
 <hr/>
 
 <div class="container">
-  <h3 class="text-center my-4">My RSVP'd Events</h3>
-  <div class="cards profile-cards">
-    <% 
-    for (Event evt : rsvpEvents) {
-      String bgClass = "";
-      switch (evt.getClubID()) {
-        case 1: bgClass = "bg-multimedia"; break;
-        case 2: bgClass = "bg-photography"; break;
-        case 3: bgClass = "bg-debate"; break;
-        case 4: bgClass = "bg-entrepreneurship"; break;
-        default: bgClass = "";
-      }
-    %>
-    <div class="card">
-      <div class="card__img <%= bgClass %>"></div>
-      <div class="card__info">
-        <span class="card_category"><%= evt.getClubName() %></span>
-        <h3 class="card__title"><%= evt.getEventTitle() %></h3>
-        <span class="card__by">On <%= evt.getEventDate() %></span>
+  <div class="rsvp-title">My RSVP'd Events</div>
+  <% if (rsvpEvents.isEmpty()) { %>
+    <div class="rsvp-empty">You have not RSVP'd to any events yet.</div>
+  <% } else { %>
+    <div class="cards profile-cards">
+      <% for (Event evt : rsvpEvents) { 
+           String bgClass = "";
+           switch (evt.getClubID()) {
+               case 1: bgClass = "bg-multimedia"; break;
+               case 2: bgClass = "bg-photography"; break;
+               case 3: bgClass = "bg-debate"; break;
+               case 4: bgClass = "bg-entrepreneurship"; break;
+               default: bgClass = "";
+           }
+      %>
+      <div class="card">
+        <div class="card__img <%= bgClass %>"></div>
+        <div class="card__info">
+          <span class="card_category"><%= evt.getClubName() %></span>
+          <h3 class="card__title"><%= evt.getEventTitle() %></h3>
+          <span class="card__by">On <%= evt.getEventDate() %></span>
+        </div>
       </div>
+      <% } %>
     </div>
-    <% } %>
-  </div>
+  <% } %>
 </div>
+
+<% if (!organiserEvents.isEmpty()) { %>
+<hr/>
+<div class="container">
+  <div class="rsvp-title">My Organized Events</div>
+  <% for (Event evt : organiserEvents) { %>
+  <div class="org-card">
+    <div class="org-title"><%= evt.getEventTitle() %></div>
+    <div class="org-date"><%= evt.getEventDate() %></div>
+    <div class="org-attendees">
+      <small class="text-muted">Attendees:</small>
+      <% List<String> attendees = attendeesMap.get(evt.getEventID());
+         if (attendees != null && !attendees.isEmpty()) { %>
+        <ul>
+          <% for (String name : attendees) { %>
+            <li><%= name %></li>
+          <% } %>
+        </ul>
+      <% } else { %>
+        <div class="text-muted">No attendees yet.</div>
+      <% } %>
+    </div>
+  </div>
+  <% } %>
+</div>
+<% } %>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

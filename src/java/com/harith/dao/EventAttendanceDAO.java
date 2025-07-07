@@ -82,6 +82,24 @@ public class EventAttendanceDAO {
     stmt.close();
     return events;
 }
+    
+    public List<String> getAttendeesForEvent(int eventId) throws SQLException {
+    List<String> attendees = new ArrayList<String>();
+
+    String sql = "SELECT S.STUDENT_NAME FROM EVENT_ATTENDANCE EA JOIN STUDENTS S ON EA.STUDENT_ID = S.STUDENT_ID WHERE EA.EVENT_ID = ?";
+    PreparedStatement stmt = conn.prepareStatement(sql);
+    stmt.setInt(1, eventId);
+    ResultSet rs = stmt.executeQuery();
+
+    while (rs.next()) {
+        attendees.add(rs.getString("STUDENT_NAME"));
+    }
+
+    rs.close();
+    stmt.close();
+    return attendees;
+}
+
 }
 
   

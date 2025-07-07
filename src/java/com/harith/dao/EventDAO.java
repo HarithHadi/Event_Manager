@@ -37,6 +37,50 @@ public class EventDAO {
         }
         return events;
     }
+    
+    public int InsertEvent(Event event ) throws SQLException{
+        String sql = "INSERT INTO EVENTS (EVENT_TITLE, EVENT_DATE, EVENT_DESC, CLUB_ID) VALUES(?,?,?,?)";
+        int generatedId = -1;
+         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             stmt.setString(1, event.getEventTitle());
+             stmt.setString(2, event.getEventDate());
+             stmt.setString(3, event.getEventDesc());
+             stmt.setInt(4, event.getClubID());
+             
+             int rowsAffected = stmt.executeUpdate();
+             if(rowsAffected > 0){
+                 ResultSet rs = stmt.getGeneratedKeys();
+                 if(rs.next()){
+                     generatedId = rs.getInt(1);
+                 }
+                 rs.close();
+             }
+             
+         }
+         return generatedId;
+    }
+    
+    public List<Event> getEventsByClubId(int clubId) throws SQLException {
+    List<Event> events = new ArrayList<Event>();
+    String sql = "SELECT EVENT_ID, EVENT_TITLE, EVENT_DATE, EVENT_DESC FROM EVENTS WHERE CLUB_ID = ?";
+    PreparedStatement stmt = conn.prepareStatement(sql);
+    stmt.setInt(1, clubId);
+    ResultSet rs = stmt.executeQuery();
+
+    while (rs.next()) {
+        Event e = new Event();
+        e.setEventID(rs.getInt("EVENT_ID"));
+        e.setEventTitle(rs.getString("EVENT_TITLE"));
+        e.setEventDate(rs.getDate("EVENT_DATE").toString());
+        e.setEventDesc(rs.getString("EVENT_DESC"));
+        events.add(e);
+    }
+
+    rs.close();
+    stmt.close();
+    return events;
+}
+
 
    
 }
