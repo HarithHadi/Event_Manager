@@ -136,7 +136,7 @@
                         </svg>
                         <span class="card__time">10 Days</span>
                     </div>
-                    <button type="button" class="btn btn-outline-warning">RSVP</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="openRsvpModal(1)">RSVP</button>
                 </div>
             </div>
 
@@ -156,7 +156,7 @@
                         </svg>
                         <span class="card__time">10 Days</span>
                     </div>
-                    <button type="button" class="btn btn-outline-warning">RSVP</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="openRsvpModal(1)">RSVP</button>
                 </div>
             </div>
 
@@ -176,7 +176,7 @@
                         </svg>
                         <span class="card__time">10 Days</span>
                     </div>
-                    <button type="button" class="btn btn-outline-warning">RSVP</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="openRsvpModal(1)">RSVP</button>
                 </div>
             </div>
         </div>
