@@ -35,4 +35,26 @@ public class EventDAO {
         }
         return events;
     }
+    
+    public int InsertEvent(Event event ) throws SQLException{
+        String sql = "INSERT INTO EVENTS (EVENT_TITLE, EVENT_DATE, EVENT_DESC, CLUB_ID) VALUES(?,?,?,?)";
+        int generatedId = -1;
+         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             stmt.setString(1, event.getEventTitle());
+             stmt.setString(2, event.getEventDate());
+             stmt.setString(3, event.getEventDesc());
+             stmt.setInt(4, event.getClubID());
+             
+             int rowsAffected = stmt.executeUpdate();
+             if(rowsAffected > 0){
+                 ResultSet rs = stmt.getGeneratedKeys();
+                 if(rs.next()){
+                     generatedId = rs.getInt(1);
+                 }
+                 rs.close();
+             }
+             
+         }
+         return generatedId;
+    }
 }

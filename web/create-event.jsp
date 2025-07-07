@@ -27,7 +27,7 @@
           <li class="nav-item"><a class="nav-link" href="registerClub.jsp">Register Club</a></li>
           <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
           <li class="nav-item"><a class="nav-link" href="approval.jsp">Approve Events</a></li>
-          <li class="nav-item"><a class="nav-link text-danger" href="login.jsp">Logout</a></li>
+          <li class="nav-item"><a class="nav-link text-danger" href="LogoutServlet">Logout</a></li>
         </ul>
       </div>
     </div>
@@ -38,6 +38,7 @@
       <h1 class="display-4 fw-bold">Create New Event 📅</h1>
     </div>
   </header>
+  
 
   <section class="py-5">
     <div class="container px-5">
@@ -59,10 +60,6 @@
           </select>
         </div>
 
-        <div class="mb-3">
-          <label for="clubName" class="form-label">Club Name</label>
-          <input type="text" class="form-control" id="clubName" name="clubName" placeholder="Enter club name" required>
-        </div>
 
         <div class="mb-3">
           <label for="eventDate" class="form-label">Event Date</label>

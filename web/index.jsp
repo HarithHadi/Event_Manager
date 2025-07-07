@@ -81,6 +81,21 @@
 </div>
 <% } %>
 
+<%
+      String event = request.getParameter("event");
+      if ("created".equals(event)) {
+  %>
+  <div class="alert alert-success alert-dismissible fade show text-center mx-auto mt-3" style="max-width: 600px;">
+      You have successfully created an event !
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } else if ("insertfail".equals(event)) { %>
+<div class="alert alert-warning alert-dismissible fade show text-center mx-auto mt-3" style="max-width: 600px;">
+    Your event has not been created
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<% } %>  
+
 <section class="py-5">
     <div class="cards">
     <% 
