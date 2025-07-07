@@ -1,7 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page import="com.harith.model.Student" %>
 <%
-    if (session.getAttribute("currentStudent") == null) {
+    Student student = (Student) session.getAttribute("currentStudent");
+    if (student == null) {
         response.sendRedirect("loginn.jsp?haataklogin=true");
+        return;
     }
 %>
 <!DOCTYPE html>
@@ -49,7 +52,7 @@
                     %>
 
                     <li class="nav-item"><a class="nav-link" href="profile.jsp">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link text-danger" href="login.jsp">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="LogoutServlet">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -59,7 +62,7 @@
     <header class="bg-light py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-dark">
-                <h1 class="display-4 fw-bold">Join 🎉🎈</h1> 
+                <h1 class="display-4 fw-bold">Hello <%= student.getStudentName() %>!👋</h1> 
             </div>
         </div>
     </header>
