@@ -12,8 +12,10 @@ public class EventDAO {
         this.conn = conn;
     }
 
+    // Fetch all events with club name
     public List<Event> getAllEvents() {
-        List<Event> events = new ArrayList<>();
+       List<Event> events = new ArrayList<Event>();
+
         String sql = "SELECT E.EVENT_ID, E.CLUB_ID, C.CLUB_NAME, E.EVENT_TITLE, E.EVENT_DATE, E.EVENT_DESC " +
                      "FROM EVENTS E JOIN CLUBS C ON E.CLUB_ID = C.CLUB_ID";
         try (
@@ -24,7 +26,7 @@ public class EventDAO {
                 Event event = new Event();
                 event.setEventID(rs.getInt("EVENT_ID"));
                 event.setClubID(rs.getInt("CLUB_ID"));
-                event.setClubName(rs.getString("CLUB_NAME"));  // NEW
+                event.setClubName(rs.getString("CLUB_NAME"));
                 event.setEventTitle(rs.getString("EVENT_TITLE"));
                 event.setEventDate(rs.getDate("EVENT_DATE").toString());
                 event.setEventDesc(rs.getString("EVENT_DESC"));
@@ -35,4 +37,6 @@ public class EventDAO {
         }
         return events;
     }
+
+   
 }
