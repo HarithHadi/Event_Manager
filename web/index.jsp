@@ -64,6 +64,25 @@
         </div>
     </header>
 
+<%
+    String rsvpStatus = request.getParameter("rsvp");
+    if ("success".equals(rsvpStatus)) {
+%>
+<div class="alert alert-success alert-dismissible fade show text-center mx-auto mt-3" style="max-width: 600px;" role="alert">
+    Successfully RSVP’d for the event! 🎉 See you there!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<%
+    } else if ("exists".equals(rsvpStatus)) {
+%>
+<div class="alert alert-warning alert-dismissible fade show text-center mx-auto mt-3" style="max-width: 600px;" role="alert">
+    You have already RSVP’d for this event.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<%
+    }
+%>
+
 
     <section class="py-3">
         <div class="container px-5">
@@ -97,7 +116,7 @@
                         </svg>
                         <span class="card__time">10 Days</span>
                     </div>
-                    <button type="button" class="btn btn-outline-warning">RSVP</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="openRsvpModal(1)">RSVP</button>
                 </div>
             </div>
 
@@ -164,7 +183,37 @@
     </section>
 
    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/scripts.js"></script>
+    <!-- RSVP Modal -->
+<div class="modal fade" id="rsvpModal" tabindex="-1" aria-labelledby="rsvpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="RSVPServlet">
+        <div class="modal-header">
+          <h5 class="modal-title" id="rsvpModalLabel">Confirm RSVP</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>Do you want to RSVP for this event?</p>
+          <input type="hidden" name="event_id" id="event_id_field" />
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Yes, RSVP</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function openRsvpModal(eventId) {
+    document.getElementById('event_id_field').value = eventId;
+    var myModal = new bootstrap.Modal(document.getElementById('rsvpModal'));
+    myModal.show();
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/scripts.js"></script>
 </body>
 </html>
