@@ -1,10 +1,14 @@
 package com.harith.servlets;
 
+import com.harith.dao.OrganizerDAO;
 import java.io.IOException;
 import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import com.harith.model.Student;
+import com.harith.model.User;
+import com.harith.dao.UserDAO;
+import com.harith.dao.StudentDAO;
 
 public class loginServlet extends HttpServlet {
 
@@ -16,71 +20,31 @@ public class loginServlet extends HttpServlet {
 
         try {
             Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Event_Manager", "app", "app");
-
-            // validate user
-            String query = "SELECT * FROM USERS WHERE email=? AND password=?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, email);
-            stmt.setString(2, password);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                int userId = rs.getInt("user_id");
+            UserDAO userDAO = new UserDAO(conn);
+            
+            User user = userDAO.getUserByEmailAndPassword(email, password);
+            StudentDAO studentDAO = new StudentDAO(conn);
+            OrganizerDAO organizerDAO = new OrganizerDAO(conn);
+            
+            
+            if(user != null){
+                int userId = user.getUserId();
+                String role = user.getRole();
+                
+                Student student = studentDAO.getStudentByUserId(userId);
+                boolean isOrganizer = (student != null) && organizerDAO.CheckIfStudentIsOrganizer(student.getStudentID());
+                
                 HttpSession session = request.getSession();
                 session.setAttribute("userID", userId);
-                session.setAttribute("role", rs.getString("role"));
-
-                
-                String studentQuery = "SELECT * FROM STUDENTS WHERE USER_ID=?";
-                PreparedStatement studentStmt = conn.prepareStatement(studentQuery);
-                studentStmt.setInt(1, userId);
-                ResultSet studentrs = studentStmt.executeQuery();
-                
-                if(studentrs.next()){
-                    Student student = new Student();
-                    student.setStudentID(studentrs.getInt("STUDENT_ID"));
-                    student.setUserID(userId);
-                    student.setClubID(studentrs.getInt("CLUB_ID"));
-                    student.setStudentName(studentrs.getString("STUDENT_NAME"));
-                    student.setStudentCourse(studentrs.getString("STUDENT_COURSE"));
-                    student.setStudentPart(studentrs.getInt("STUDENT_PART"));
-                    student.setStudentGroup(studentrs.getString("STUDENT_GROUP"));
-                    student.setStudentPhone(studentrs.getInt("STUDENT_PHONE"));
-                    
-                    session.setAttribute("currentStudent", student);
-                }
-                studentrs.close();
-                studentStmt.close();
-                
-
-
-                // check if user is an organizer
-                String orgQuery = "SELECT O.ORGANIZER_ID FROM ORGANIZERS O "
-                                + "JOIN STUDENTS S ON O.STUDENT_ID = S.STUDENT_ID "
-                                + "WHERE S.USER_ID = ?";
-                PreparedStatement orgStmt = conn.prepareStatement(orgQuery);
-                orgStmt.setInt(1, userId);
-                ResultSet orgRs = orgStmt.executeQuery();
-
-                if (orgRs.next()) {
-                    session.setAttribute("isOrganizer", true);
-                } else {
-                    session.setAttribute("isOrganizer", false);
-                }
-
-                orgRs.close();
-                orgStmt.close();
-
+                session.setAttribute("role", role);
+                session.setAttribute("currentStudent", student);
+                session.setAttribute("isOrganizer", isOrganizer);
 
                 response.sendRedirect("index.jsp");
-            } else {
+            }else{
                 response.sendRedirect("loginn.jsp?error=invalid");
             }
-
-            rs.close();
-            stmt.close();
-            conn.close();
+            
 
         } catch (Exception e) {
             e.printStackTrace();
