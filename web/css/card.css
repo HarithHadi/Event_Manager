@@ -10,20 +10,19 @@
     box-sizing: border-box;
 }
 
-
-.card--1 .card__img, .card--1 .card__img--hover {
-    background: #868686;
+.bg-multimedia {
+  background-image: url("../assets/multi-bg.jpg");
+}
+.bg-photography {
+  background-image: url("../assets/photo-bg.jpg");
+}
+.bg-debate {
+  background-image: url("../assets/debate-bg.png");
+}
+.bg-entrepreneurship {
+  background-image: url("../assets/ent-bg.jpg");
 }
 
-.card--2 .card__img, .card--2 .card__img--hover {
-    background-image: url("../assets/graduationparty.jpg");
-}
-.card--3 .card__img, .card--3 .card__img--hover {
-    background-image: url("../assets/ShankarVedantam_2022-embed.jpg");
-}
-.card--4 .card__img, .card--4 .card__img--hover {
-    background-image: url("../assets/RUN.jpg")
-}
 
 .card__like {
     width: 18px;
@@ -47,7 +46,7 @@
 }
 
 .card__img {
-  visibility: hidden;
+
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
