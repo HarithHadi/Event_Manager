@@ -1,4 +1,4 @@
-  <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+ <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.harith.model.Student" %>
 <%@ page import="com.harith.model.Event" %>
 <%@ page import="com.harith.dao.EventAttendanceDAO" %>
@@ -85,6 +85,7 @@ try {
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       padding: 30px;
       text-align: center;
+      position: relative;
     }
     .profile-details h1 {
       font-weight: 700;
@@ -178,6 +179,36 @@ try {
     .org-attendees li {
       padding: 2px 0;
     }
+    
+    .edit-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #0d6efd;
+}
+.profile-details:hover .edit-btn {
+  display: block;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: none;
+  background: transparent;
+  border: none;
+  color: red;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.org-card:hover .delete-btn {
+  display: block;
+}
+
+
   </style>
 </head>
 <body>
@@ -199,6 +230,8 @@ try {
 </nav>
 
 <div class="profile-details">
+  <p class="edit-btn bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#editModal"> Edit</p>
+
   <h1><%= student.getStudentName() %></h1>
   <h2><%= clubName %>
     <% if (Boolean.TRUE.equals(session.getAttribute("isOrganizer"))) { %>
@@ -212,6 +245,7 @@ try {
     <p>Phone: <%= student.getStudentPhone() %></p>
   </div>
 </div>
+
 
 <hr/>
 
@@ -249,7 +283,12 @@ try {
 <div class="container">
   <div class="rsvp-title">My Organized Events</div>
   <% for (Event evt : organiserEvents) { %>
-  <div class="org-card">
+  <div class="org-card position-relative">
+    <button type="button" class="delete-btn bi bi-trash-fill" title="Delete Event"
+            data-bs-toggle="modal" data-bs-target="#deleteModal"
+            data-event-id="<%= evt.getEventID() %>" data-event-title="<%= evt.getEventTitle() %>">
+    </button>
+
     <div class="org-title"><%= evt.getEventTitle() %></div>
     <div class="org-date"><%= evt.getEventDate() %></div>
     <div class="org-attendees">
@@ -270,6 +309,74 @@ try {
 </div>
 <% } %>
 
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content" action="UpdateProfileServlet" method="post">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="studentID" value="<%= student.getStudentID() %>" />
+
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="studentName" value="<%= student.getStudentName() %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone</label>
+          <input type="text" class="form-control" id="phone" name="studentPhone" value="<%= student.getStudentPhone() %>" required>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="modal-content" action="DeleteEventServlet" method="post">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete the event <strong id="eventToDelete"></strong>?
+        <input type="hidden" name="eventID" id="modalEventID">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  const deleteModal = document.getElementById('deleteModal');
+  deleteModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const eventId = button.getAttribute('data-event-id');
+    const eventTitle = button.getAttribute('data-event-title');
+
+    const eventIdInput = deleteModal.querySelector('#modalEventID');
+    const eventTitleText = deleteModal.querySelector('#eventToDelete');
+
+    eventIdInput.value = eventId;
+    eventTitleText.textContent = eventTitle;
+  });
+</script>
+
 </body>
 </html>
