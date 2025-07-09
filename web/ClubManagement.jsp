@@ -11,7 +11,13 @@
 <%@ page import="com.harith.dao.EventDAO" %>
 <%@ page import="com.harith.dao.EventAttendanceDAO" %>
 
-
+<%
+    Boolean isOrganizer = (Boolean) session.getAttribute("isOrganizer");
+    if(!isOrganizer){
+        response.sendRedirect("index.jsp?action=notauthorized");
+    }
+%>
+ 
 <%
     List<Student> Students = new ArrayList<Student>();
     Map<Integer, List<String>> attendeesMap = new HashMap<Integer, List<String>>();
@@ -213,7 +219,6 @@
                 <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
                 <%
                     // Dummy check - assume user is organizer for demo
-                    Boolean isOrganizer = true;
                     if (isOrganizer) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
@@ -354,6 +359,7 @@
       </button>
       <div class="org-title fw-bold"><%= evt.getEventTitle() %></div>
       <div class="org-date text-muted">Date: <%= evt.getEventDate() %></div>
+      <div class="org-date text-muted">"<%= evt.getEventDesc() %>"</div>
       <div class="org-attendees mt-2">
         <small class="text-muted">Attendees:</small>
         <% List<String> attendees = attendeesMap.get(evt.getEventID());

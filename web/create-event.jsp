@@ -1,4 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+
+<%
+    Boolean isOrganizer = (Boolean) session.getAttribute("isOrganizer");
+    if(!isOrganizer){
+        response.sendRedirect("index.jsp?action=notauthorized");
+    }
+%>
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 </head>
 <body>
- 
+
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container px-5">
         <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
@@ -24,8 +32,8 @@
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
                 <%
-                    // Dummy check - assume user is organizer for demo
-                    Boolean isOrganizer = true;
+                    
+                    
                     if (isOrganizer) {
                 %>
                 <li class="nav-item"><a class="nav-link active" href="create-event.jsp">Create Event</a></li>
@@ -56,16 +64,7 @@
           <input type="text" class="form-control" id="eventTitle" name="eventTitle" placeholder="Enter event name" required>
         </div>
 
-        <div class="mb-3">
-          <label for="eventCategory" class="form-label">Category</label>
-          <select class="form-select" id="eventCategory" name="eventCategory" required>
-            <option selected disabled>Choose category</option>
-            <option value="Ceremony">Ceremony</option>
-            <option value="Social">Social</option>
-            <option value="Talk">Talk</option>
-            <option value="Sport">Sport</option>
-          </select>
-        </div>
+        
 
 
         <div class="mb-3">

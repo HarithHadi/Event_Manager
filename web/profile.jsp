@@ -2,12 +2,14 @@
 <%@ page import="com.harith.model.Student" %>
 <%@ page import="com.harith.model.Event" %>
 <%@ page import="com.harith.dao.EventAttendanceDAO" %>
+<%@ page import="com.harith.dao.OrganizerDAO" %>
 <%@ page import="com.harith.dao.EventDAO" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.*" %>
 
 <%
 Student student = (Student) session.getAttribute("currentStudent");
+Boolean isOrganizer = (Boolean) session.getAttribute("isOrganizer");
 if (student == null) {
     response.sendRedirect("loginn.jsp?haataklogin=true");
     return;
@@ -21,6 +23,7 @@ Map<Integer, List<String>> attendeesMap = new HashMap<Integer, List<String>>();
 
 try {
     Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Event_Manager", "app", "app");
+    
 
     if (student.getClubID() > 0) {
         PreparedStatement clubStmt = conn.prepareStatement("SELECT CLUB_NAME FROM CLUBS WHERE CLUB_ID = ?");
@@ -224,7 +227,7 @@ try {
                 <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
                 <%
                     // Dummy check - assume user is organizer for demo
-                    Boolean isOrganizer = true;
+                    
                     if (isOrganizer) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
