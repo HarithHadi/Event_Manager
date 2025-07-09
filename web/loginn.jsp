@@ -67,7 +67,7 @@
               </form>
 
               <hr>
-              <p class="text-center small text-muted">This is a mockup. Click a role to simulate login flow:</p>
+              <p class="text-center small text-muted">Don't have an account?</p>
 <!--              <div class="d-flex justify-content-center gap-2">
                 <a href="index.jsp" class="btn btn-outline-primary btn-sm">Login as Student</a>
                 <a href="approval.jsp" class="btn btn-outline-warning btn-sm">Login as Staff</a>
