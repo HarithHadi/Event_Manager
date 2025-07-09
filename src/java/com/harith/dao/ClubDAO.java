@@ -49,7 +49,7 @@ public class ClubDAO {
             curr.setStudentCourse(rs.getString("STUDENT_COURSE"));
             curr.setStudentPart(rs.getInt("STUDENT_PART"));
             curr.setStudentGroup(rs.getString("STUDENT_GROUP"));
-            curr.setStudentPhone(rs.getInt("STUDENT_PHONE"));
+            curr.setStudentPhone(rs.getString("STUDENT_PHONE"));
             curr.setClubID(rs.getInt("CLUB_ID"));
             
             students.add(curr);

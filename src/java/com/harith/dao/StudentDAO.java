@@ -31,7 +31,7 @@ public class StudentDAO {
             student.setStudentCourse(rs.getString("STUDENT_COURSE"));
             student.setStudentPart(rs.getInt("STUDENT_PART"));
             student.setStudentGroup(rs.getString("STUDENT_GROUP"));
-            student.setStudentPhone(rs.getInt("STUDENT_PHONE"));
+            student.setStudentPhone(rs.getString("STUDENT_PHONE"));
         }
         rs.close();
         stmt.close();

@@ -12,17 +12,13 @@ import java.sql.*;
 public class UpdateProfileServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Retrieve updated values from form
+     
         String newName = request.getParameter("studentName");
-        String newPhoneStr = request.getParameter("studentPhone");
+        String newPhone = request.getParameter("studentPhone");
 
-        // Validate and parse phone
-        int newPhone = 0;
-        try {
-            newPhone = Integer.parseInt(newPhoneStr);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            response.sendRedirect("profile.jsp?error=invalidphone");
+ 
+        if (newName == null || newPhone == null || newName.trim().isEmpty() || newPhone.trim().isEmpty()) {
+            response.sendRedirect("profile.jsp?error=emptyfields");
             return;
         }
 
@@ -38,12 +34,12 @@ public class UpdateProfileServlet extends HttpServlet {
             String sql = "UPDATE STUDENTS SET STUDENT_NAME = ?, STUDENT_PHONE = ? WHERE STUDENT_ID = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, newName);
-            stmt.setInt(2, newPhone);
+            stmt.setString(2, newPhone); 
             stmt.setInt(3, student.getStudentID());
 
             int rows = stmt.executeUpdate();
             if (rows > 0) {
-               
+              
                 student.setStudentName(newName);
                 student.setStudentPhone(newPhone);
                 session.setAttribute("currentStudent", student);

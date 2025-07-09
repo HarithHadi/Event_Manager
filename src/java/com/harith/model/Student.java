@@ -8,7 +8,7 @@ public class Student {
     private String studentCourse;
     private int studentPart;
     private String studentGroup;
-    private int studentPhone;
+    private String studentPhone;
 
     // Default constructor
     public Student() {
@@ -19,11 +19,11 @@ public class Student {
         this.studentCourse = "";
         this.studentPart = 0;
         this.studentGroup = "";
-        this.studentPhone = 0;
+        this.studentPhone = "";
     }
 
     // Full constructor
-    public Student(int studentID, int userID, int clubID, String studentName, String studentCourse, int studentPart, String studentGroup, int studentPhone) {
+    public Student(int studentID, int userID, int clubID, String studentName, String studentCourse, int studentPart, String studentGroup, String studentPhone) {
         this.studentID = studentID;
         this.userID = userID;
         this.clubID = clubID;
@@ -91,11 +91,11 @@ public class Student {
         this.studentGroup = studentGroup;
     }
 
-    public int getStudentPhone() {
+    public String getStudentPhone() {
         return studentPhone;
     }
 
-    public void setStudentPhone(int studentPhone) {
+    public void setStudentPhone(String studentPhone) {
         this.studentPhone = studentPhone;
     }
 }
