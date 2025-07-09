@@ -24,6 +24,7 @@ public class OrganizerDAO {
             return isOrganizer;
         }else{
             return isOrganizer;
-        }   
+        }
+       
     }
 }

@@ -32,6 +32,14 @@
         <servlet-name>DeleteEventServlet</servlet-name>
         <servlet-class>com.harith.servlets.DeleteEventServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RemoveMemberServlet</servlet-name>
+        <servlet-class>com.harith.servlets.RemoveMemberServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PromoteOrganizerServlet</servlet-name>
+        <servlet-class>com.harith.servlets.PromoteOrganizerServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -63,6 +71,14 @@
     <servlet-mapping>
         <servlet-name>DeleteEventServlet</servlet-name>
         <url-pattern>/DeleteEventServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveMemberServlet</servlet-name>
+        <url-pattern>/RemoveMemberServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PromoteOrganizerServlet</servlet-name>
+        <url-pattern>/PromoteOrganizerServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

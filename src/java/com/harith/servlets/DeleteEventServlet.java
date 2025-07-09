@@ -11,7 +11,7 @@ public class DeleteEventServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String eventIDStr = request.getParameter("eventID");
         if (eventIDStr == null) {
-            response.sendRedirect("profile.jsp?error=missingeventid");
+            response.sendRedirect("ClubManagement.jsp?action=missingeventid");
             return;
         }
 
@@ -36,6 +36,6 @@ public class DeleteEventServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        response.sendRedirect("profile.jsp?deleted=true");
+        response.sendRedirect("ClubManagement.jsp?action=deletedEventTrue");
     }
 }

@@ -2,11 +2,14 @@
 <%@ page import="com.harith.model.Student" %>
 <%@ page import="com.harith.dao.EventDAO" %>
 <%@ page import="com.harith.model.Event" %>
+<%@ page import="com.harith.dao.OrganizerDAO" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.*" %>
 
 <%
     Student student = (Student) session.getAttribute("currentStudent");
+    Boolean isOrganizer = (Boolean) session.getAttribute("isOrganizer");
+    
     if (student == null) {
         response.sendRedirect("loginn.jsp?haataklogin=true");
         return;
@@ -16,6 +19,7 @@
     try {
         Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Event_Manager", "app", "app");
         EventDAO eventDAO = new EventDAO(conn);
+        
         eventList = eventDAO.getAllEvents();
         conn.close();
     } catch (Exception e) {
@@ -44,12 +48,14 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
+                <li class="nav-item"><a class="nav-link  active" href="index.jsp">Home</a></li>
                 <%
-                    Boolean isOrganizer = (Boolean) session.getAttribute("isOrganizer");
-                    if (isOrganizer != null && isOrganizer) {
+                    // Dummy check - assume user is organizer for demo
+                    
+                    if (isOrganizer) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
+                <li class="nav-item"><a class="nav-link" href="ClubManagement.jsp">Club Management</a></li>
                 <%
                     }
                 %>
@@ -65,7 +71,15 @@
         <h1 class="display-4 fw-bold">Hello <%= student.getStudentName() %>!👋</h1>
     </div>
 </header>
-
+<%
+    String actionStatus = request.getParameter("action");
+    if ("notauthorized".equals(actionStatus)) {
+%>
+<div class="alert alert-warning alert-dismissible fade show text-center mx-auto mt-3" style="max-width: 600px;">
+    You're not authorized to go there..
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<%}%>
 <%
     String rsvpStatus = request.getParameter("rsvp");
     if ("success".equals(rsvpStatus)) {

@@ -2,12 +2,14 @@
 <%@ page import="com.harith.model.Student" %>
 <%@ page import="com.harith.model.Event" %>
 <%@ page import="com.harith.dao.EventAttendanceDAO" %>
+<%@ page import="com.harith.dao.OrganizerDAO" %>
 <%@ page import="com.harith.dao.EventDAO" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.*" %>
 
 <%
 Student student = (Student) session.getAttribute("currentStudent");
+Boolean isOrganizer = (Boolean) session.getAttribute("isOrganizer");
 if (student == null) {
     response.sendRedirect("loginn.jsp?haataklogin=true");
     return;
@@ -21,6 +23,7 @@ Map<Integer, List<String>> attendeesMap = new HashMap<Integer, List<String>>();
 
 try {
     Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Event_Manager", "app", "app");
+    
 
     if (student.getClubID() > 0) {
         PreparedStatement clubStmt = conn.prepareStatement("SELECT CLUB_NAME FROM CLUBS WHERE CLUB_ID = ?");
@@ -214,19 +217,29 @@ try {
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-  <div class="container px-5">
-    <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
-    <div class="collapse navbar-collapse justify-content-end">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
-        <% if (Boolean.TRUE.equals(session.getAttribute("isOrganizer"))) { %>
-        <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
-        <% } %>
-        <li class="nav-item"><a class="nav-link" href="profile.jsp">Profile</a></li>
-        <li class="nav-item"><a class="nav-link text-danger" href="LogoutServlet">Logout</a></li>
-      </ul>
+    <div class="container px-5">
+        <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
+                <%
+                    // Dummy check - assume user is organizer for demo
+                    
+                    if (isOrganizer) {
+                %>
+                <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
+                <li class="nav-item"><a class="nav-link" href="ClubManagement.jsp">Club Management</a></li>
+                <%
+                    }
+                %>
+                <li class="nav-item"><a class="nav-link active" href="profile.jsp">Profile</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="LogoutServlet">Logout</a></li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
 
 <div class="profile-details">
