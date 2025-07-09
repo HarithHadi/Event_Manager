@@ -25,9 +25,28 @@
       border: none;
       border-radius: 10px;
     }
+    
+      body.no-hover .card:hover {
+    transform: none !important;
+    box-shadow: 0px 13px 10px -7px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  body.no-hover .card:hover .card__img--hover {
+    height: 235px !important;
+    opacity: 1 !important;
+  }
+
+  body.no-hover .card:hover .card__info {
+    background-color: #fff !important;
+    position: static !important;
+  }
+
+  body.no-hover .card:hover .card__info-hover {
+    opacity: 0 !important;
+  }
   </style>
 </head>
-<body>
+<body class="no-hover">
  
   <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container px-5">

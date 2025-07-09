@@ -214,19 +214,29 @@ try {
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-  <div class="container px-5">
-    <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
-    <div class="collapse navbar-collapse justify-content-end">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
-        <% if (Boolean.TRUE.equals(session.getAttribute("isOrganizer"))) { %>
-        <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
-        <% } %>
-        <li class="nav-item"><a class="nav-link" href="profile.jsp">Profile</a></li>
-        <li class="nav-item"><a class="nav-link text-danger" href="LogoutServlet">Logout</a></li>
-      </ul>
+    <div class="container px-5">
+        <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
+                <%
+                    // Dummy check - assume user is organizer for demo
+                    Boolean isOrganizer = true;
+                    if (isOrganizer) {
+                %>
+                <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
+                <li class="nav-item"><a class="nav-link" href="ClubManagement.jsp">Club Management</a></li>
+                <%
+                    }
+                %>
+                <li class="nav-item"><a class="nav-link active" href="profile.jsp">Profile</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="LogoutServlet">Logout</a></li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
 
 <div class="profile-details">

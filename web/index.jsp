@@ -44,12 +44,14 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
+                <li class="nav-item"><a class="nav-link  active" href="index.jsp">Home</a></li>
                 <%
-                    Boolean isOrganizer = (Boolean) session.getAttribute("isOrganizer");
-                    if (isOrganizer != null && isOrganizer) {
+                    // Dummy check - assume user is organizer for demo
+                    Boolean isOrganizer = true;
+                    if (isOrganizer) {
                 %>
                 <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
+                <li class="nav-item"><a class="nav-link" href="ClubManagement.jsp">Club Management</a></li>
                 <%
                     }
                 %>
