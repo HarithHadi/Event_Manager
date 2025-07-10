@@ -1,6 +1,6 @@
 <div align="center">
 
-# Event Campus Manger
+# Event Campus Manger👥
 
 
 
@@ -22,7 +22,8 @@ It serves as a digital hub for students, club leaders to interact, coordinate, a
 
 4. Provide real-time RSVP tracking
 
-## Technology Stack
+
+## Technology Stack ⚒️
 |  | Technology |
 |-----:|-----------|
 |     Frontend| HTML, CSS, JSP|
