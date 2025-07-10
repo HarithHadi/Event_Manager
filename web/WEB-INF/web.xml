@@ -8,6 +8,38 @@
         <servlet-name>loginServlet</servlet-name>
         <servlet-class>com.harith.servlets.loginServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RSVPServlet</servlet-name>
+        <servlet-class>com.harith.servlets.RSVPServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>com.harith.servlets.Logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.harith.servlets.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateEventServlet</servlet-name>
+        <servlet-class>com.harith.servlets.CreateEventServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateProfileServlet</servlet-name>
+        <servlet-class>com.harith.servlets.UpdateProfileServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteEventServlet</servlet-name>
+        <servlet-class>com.harith.servlets.DeleteEventServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RemoveMemberServlet</servlet-name>
+        <servlet-class>com.harith.servlets.RemoveMemberServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PromoteOrganizerServlet</servlet-name>
+        <servlet-class>com.harith.servlets.PromoteOrganizerServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -15,6 +47,38 @@
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/loginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RSVPServlet</servlet-name>
+        <url-pattern>/RSVPServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/Logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/LogoutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateEventServlet</servlet-name>
+        <url-pattern>/CreateEventServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateProfileServlet</servlet-name>
+        <url-pattern>/UpdateProfileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteEventServlet</servlet-name>
+        <url-pattern>/DeleteEventServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveMemberServlet</servlet-name>
+        <url-pattern>/RemoveMemberServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PromoteOrganizerServlet</servlet-name>
+        <url-pattern>/PromoteOrganizerServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

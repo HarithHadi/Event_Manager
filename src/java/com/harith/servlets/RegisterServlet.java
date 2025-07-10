@@ -29,10 +29,11 @@ public class RegisterServlet extends HttpServlet {
         String course = request.getParameter("course");
         String group = request.getParameter("group");
         int part = Integer.parseInt(request.getParameter("part"));
+        Integer clubId = Integer.parseInt(request.getParameter("club"));
         String phone = request.getParameter("phone");
         String password = request.getParameter("password");
         String cpassword = request.getParameter("cpassword");
-        
+
         
         if(!password.equals(cpassword)){
             response.sendRedirect("register.jsp?message=passerror");
@@ -48,8 +49,12 @@ public class RegisterServlet extends HttpServlet {
                     stmtdupe.close();
                     response.sendRedirect("register.jsp?dupe=true");
                 }else{
+                    if (clubId == null) {
+                        response.sendRedirect("register.jsp?message=noclub");
+                        return;
+                    }
                     String insertUser = "INSERT INTO USERS (email, password, role) VALUES(?,?,'student')";
-                    String insertStudent = "INSERT INTO STUDENTS (user_id, student_name, student_course, student_part, student_group, student_phone) VALUES (?, ?, ?, ?, ?, ?)";
+                    String insertStudent = "INSERT INTO STUDENTS (user_id, student_name, student_course, student_part, student_group, student_phone, club_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
                     
                     PreparedStatement stmtUser = conn.prepareStatement(insertUser, Statement.RETURN_GENERATED_KEYS);
                     stmtUser.setString(1, email);
@@ -62,17 +67,19 @@ public class RegisterServlet extends HttpServlet {
                     }
                     stmtUser.close();
                     rsuser.close();
-                     if (userId != -1) {
-                        PreparedStatement stmtStudent = conn.prepareStatement(insertStudent);
-                        stmtStudent.setInt(1, userId);            // foreign key from USERS
-                        stmtStudent.setString(2, name);
-                        stmtStudent.setString(3, course);
-                        stmtStudent.setInt(4, part);
-                        stmtStudent.setString(5, group);
-                        stmtStudent.setString(6, phone);
-                        stmtStudent.executeUpdate();
-                        stmtStudent.close();
-                    }
+                    
+                    
+                    PreparedStatement stmtStudent = conn.prepareStatement(insertStudent);
+                    stmtStudent.setInt(1, userId);            // foreign key from USERS
+                    stmtStudent.setString(2, name);
+                    stmtStudent.setString(3, course);
+                    stmtStudent.setInt(4, part);
+                    stmtStudent.setString(5, group);
+                    stmtStudent.setString(6, phone);
+                    stmtStudent.setInt(7, clubId);
+                    stmtStudent.executeUpdate();
+                    stmtStudent.close();
+                    
                     
                 }
                 

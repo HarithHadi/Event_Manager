@@ -21,9 +21,28 @@
       border: none;
       border-radius: 10px;
     }
+    
+      body.no-hover .card:hover {
+    transform: none !important;
+    box-shadow: 0px 13px 10px -7px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  body.no-hover .card:hover .card__img--hover {
+    height: 235px !important;
+    opacity: 1 !important;
+  }
+
+  body.no-hover .card:hover .card__info {
+    background-color: #fff !important;
+    position: static !important;
+  }
+
+  body.no-hover .card:hover .card__info-hover {
+    opacity: 0 !important;
+  }
   </style>
 </head>
-<body>
+<body class="no-hover">
  
   <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container px-5">
@@ -39,6 +58,17 @@
           <div class="card shadow-sm">
             <div class="card-body">
               <h2 class="card-title text-center mb-4">Login</h2>
+                <%
+                    String error = request.getParameter("error");
+                    if ("invalid".equals(error)) {
+                %>
+                    <div class="alert alert-danger text-center" role="alert">
+                        Invalid email or password. Please try again.
+                    </div>
+                <%
+                    }
+                %>
+
 
               <!-- update login servlet disini -->
               <form action="loginServlet" method="post">
@@ -56,10 +86,13 @@
               </form>
 
               <hr>
-              <p class="text-center small text-muted">This is a mockup. Click a role to simulate login flow:</p>
-              <div class="d-flex justify-content-center gap-2">
+              <p class="text-center small text-muted">Don't have an account?</p>
+<!--              <div class="d-flex justify-content-center gap-2">
                 <a href="index.jsp" class="btn btn-outline-primary btn-sm">Login as Student</a>
                 <a href="approval.jsp" class="btn btn-outline-warning btn-sm">Login as Staff</a>
+              </div>-->
+              <div class="d-flex justify-content-center gap-2">
+                <a href="register.jsp" class="btn btn-outline-primary btn-sm">Register</a>
               </div>
 
             </div>

@@ -1,3 +1,7 @@
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,9 +25,28 @@
       border: none;
       border-radius: 10px;
     }
+    
+      body.no-hover .card:hover {
+    transform: none !important;
+    box-shadow: 0px 13px 10px -7px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  body.no-hover .card:hover .card__img--hover {
+    height: 235px !important;
+    opacity: 1 !important;
+  }
+
+  body.no-hover .card:hover .card__info {
+    background-color: #fff !important;
+    position: static !important;
+  }
+
+  body.no-hover .card:hover .card__info-hover {
+    opacity: 0 !important;
+  }
   </style>
 </head>
-<body>
+<body class="no-hover">
  
   <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container px-5">
@@ -79,6 +102,37 @@
                       <option value="Finance">Finance</option>
                     </select>
                 </div>
+                  <div class="mb-3">
+                    <label for="club" class="form-label">Select Club</label>
+                    <select class="form-select" id="club" name="club">
+                       <%
+            try {
+                Class.forName("org.apache.derby.jdbc.ClientDriver");
+                Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Event_Manager", "app", "app");
+                String sql = "SELECT CLUB_ID, CLUB_NAME FROM CLUBS";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    int clubId = rs.getInt("CLUB_ID");
+                    String clubName = rs.getString("CLUB_NAME");
+        %>
+                    <option value="<%= clubId %>"><%= clubName %></option>
+        <%
+                }
+
+                rs.close();
+                stmt.close();
+                conn.close();
+            } catch (Exception e) {
+                out.println("<option disabled>Error loading clubs</option>");
+                e.printStackTrace();
+            }
+        %>
+                    </select>
+                  </div>
+
+
                 <div class="mb-3">
                   <label for="group" class="form-label">Group</label>
                   <input type="text" class="form-control" id="email" name="group" placeholder="Enter your group">

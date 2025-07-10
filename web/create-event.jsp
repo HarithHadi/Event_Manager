@@ -1,4 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+
+<%
+    Boolean isOrganizer = (Boolean) session.getAttribute("isOrganizer");
+    if(!isOrganizer){
+        response.sendRedirect("index.jsp?action=notauthorized");
+    }
+%>
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,30 +21,39 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 </head>
 <body>
- 
-  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container px-5">
-      <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="create-event.jsp">Create Event</a></li>
-          <li class="nav-item"><a class="nav-link" href="approval.jsp">Approve Events</a></li>
-          <li class="nav-item"><a class="nav-link text-danger" href="login.jsp">Logout</a></li>
-        </ul>
-      </div>
+        <a class="navbar-brand fw-bold" href="index.jsp">CampusEvents</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
+                <%
+                    
+                    
+                    if (isOrganizer) {
+                %>
+                <li class="nav-item"><a class="nav-link active" href="create-event.jsp">Create Event</a></li>
+                <li class="nav-item"><a class="nav-link" href="ClubManagement.jsp">Club Management</a></li>
+                <%
+                    }
+                %>
+                <li class="nav-item"><a class="nav-link" href="profile.jsp">Profile</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="LogoutServlet">Logout</a></li>
+            </ul>
+        </div>
     </div>
-  </nav>
+</nav>
 
   <header class="bg-light py-5">
     <div class="container text-center">
       <h1 class="display-4 fw-bold">Create New Event 📅</h1>
     </div>
   </header>
+  
 
   <section class="py-5">
     <div class="container px-5">
@@ -47,21 +64,8 @@
           <input type="text" class="form-control" id="eventTitle" name="eventTitle" placeholder="Enter event name" required>
         </div>
 
-        <div class="mb-3">
-          <label for="eventCategory" class="form-label">Category</label>
-          <select class="form-select" id="eventCategory" name="eventCategory" required>
-            <option selected disabled>Choose category</option>
-            <option value="Ceremony">Ceremony</option>
-            <option value="Social">Social</option>
-            <option value="Talk">Talk</option>
-            <option value="Sport">Sport</option>
-          </select>
-        </div>
+        
 
-        <div class="mb-3">
-          <label for="clubName" class="form-label">Club Name</label>
-          <input type="text" class="form-control" id="clubName" name="clubName" placeholder="Enter club name" required>
-        </div>
 
         <div class="mb-3">
           <label for="eventDate" class="form-label">Event Date</label>
